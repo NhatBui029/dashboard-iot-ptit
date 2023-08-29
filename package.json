@@ -1,0 +1,31 @@
+{
+  "name": "dashboard-iot",
+  "version": "1.0.0",
+  "description": "bài tập lớn môn IOT và ứng dụng - PTIT",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon --inspect index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TheodoreBui/dashboard-iot-ptit.git"
+  },
+  "keywords": [
+    "iot",
+    "dashboard",
+    "ptit"
+  ],
+  "author": "theodorebui",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TheodoreBui/dashboard-iot-ptit/issues"
+  },
+  "homepage": "https://github.com/TheodoreBui/dashboard-iot-ptit#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}

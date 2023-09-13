@@ -33,7 +33,6 @@ for (let i = 0; i < 19; i++) {
   arr.unshift(arr[0] + Math.floor(Math.random() * 21) - 10);
 }
 var dem = 0;
-console.log(dem)
 
 function randomdata() {
   if (dem == 0) {
@@ -50,6 +49,7 @@ function randomdata() {
     arr[0] = arr[0] + Math.floor(Math.random() * 11) - 5;
     if(arr[0] < 0) arr[0] = -arr[0];
     if(arr[0] > 100) arr[0] = arr[0] - 100;
+    document.getElementById('temp').textContent= arr[0]+'%';
     return arr;
   }
 }
@@ -60,12 +60,11 @@ arr1.push(30);
 for (let i = 0; i < 19; i++) {
   arr1.unshift(arr1[0] + Math.floor(Math.random() * 21) - 10);
 }
-var dem = 0;
-console.log(dem)
+var dem1 = 0;
 
 function randomdata1() {
-  if (dem == 0) {
-    dem = dem + 1;
+  if (dem1 == 0) {
+    dem1 = dem1 + 1;
     return arr1;
   }
   else {
@@ -78,10 +77,37 @@ function randomdata1() {
     arr1[0] = arr1[0] + Math.floor(Math.random() * 21) - 10;
     if(arr1[0] < 0) arr1[0] = -arr1[0];
     if(arr1[0] > 100) arr1[0] = arr1[0] - 100;
+    document.getElementById('hum').textContent= arr1[0]+'%';
     return arr1;
   }
 }
 
+var arr2 = [];
+arr2.push(500);
+for (let i = 0; i < 19; i++) {
+  arr2.unshift(arr2[0] + Math.floor(Math.random() * 200) - 100);
+}
+var dem2 = 0;
+
+function randomdata2() {
+  if (dem2 == 0) {
+    dem2 = dem2 + 1;
+    return arr2;
+  }
+  else {
+    let m = arr2[19];
+    for (let i = 18; i >=0; i--) {
+      let n = arr2[i];
+      arr2[i] = m;
+      m = n;
+    }
+    arr2[19] = arr2[19] + Math.floor(Math.random() * 200) - 100;
+    if(arr2[19] < 19) arr2[19] = -arr2[19];
+    if(arr2[19] > 1000) arr2[19] = arr2[19] - 1000;
+    document.getElementById('light').textContent= arr2[19]+'Lux';
+    return arr2;
+  }
+}
 
 function createLabels() {
   let arr = [];
@@ -96,14 +122,15 @@ var loop = setInterval(() => {
   var myLineChart = new Chart(ctx, { 
     type: 'line',
     data: {
-      labels: createLabels(),//["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+      labels: createLabels(),
       datasets: [
         {
           label: "Temperature",
           lineTension: 0.3,
           backgroundColor: "rgba(0,0,0,0.01",
           borderColor: "rgba(78, 115, 223, 1)",
-          pointRadius: 3,
+          borderWidth: 2,
+          pointRadius: 0,
           pointBackgroundColor: "rgba(78, 115, 223, 1)",
           pointBorderColor: "rgba(78, 115, 223, 1)",
           pointHoverRadius: 3,
@@ -111,14 +138,16 @@ var loop = setInterval(() => {
           pointHoverBorderColor: "rgba(78, 115, 223, 1)",
           pointHitRadius: 10,
           pointBorderWidth: 2,
-          data: randomdata()
+          data: randomdata(),
+          yAsixID: 'yLeft'
         },
         {
           label: "Humdity",
           lineTension: 0.3,
           backgroundColor: "rgba(0,0,0,0.01",
           borderColor: "green",
-          pointRadius: 3,
+          pointRadius: 0,
+          borderWidth: 2,
           pointBackgroundColor: "green",
           pointBorderColor: "green",
           pointHoverRadius: 3,
@@ -126,7 +155,25 @@ var loop = setInterval(() => {
           pointHoverBorderColor: "green",
           pointHitRadius: 10,
           pointBorderWidth: 2,
-          data: randomdata1()
+          data: randomdata1(),
+          yAxisID: 'left',
+        },
+        {
+          label: "Light",
+          lineTension: 0.3,
+          backgroundColor: "rgba(0,0,0,0.01",
+          borderColor: "black",
+          pointRadius: 0,
+          borderWidth: 2,
+          pointBackgroundColor: "black",
+          pointBorderColor: "black",
+          pointHoverRadius: 3,
+          pointHoverBackgroundColor: "black",
+          pointHoverBorderColor: "black",
+          pointHitRadius: 10,
+          pointBorderWidth: 2,
+          data: randomdata2(),
+          yAxisID: 'right',
         }
       ],
     },
@@ -157,12 +204,32 @@ var loop = setInterval(() => {
           }
         }],
         yAxes: [{
+          id: 'left',
+          position: 'left',
           ticks: {
             maxTicksLimit: 10, // số lượng đưởng kẻ ngang ( chia tỉ lệ)
             padding: 10,
             // Include a dollar sign in the ticks
             callback: function (value, index, values) {
-              return '$' + number_format(value);
+              return  number_format(value) ;
+            }
+          },
+          gridLines: { // đường kẻ ngang 
+            color: "rgb(234, 236, 244)",
+            zeroLineColor: "rgb(234, 236, 244)",
+            drawBorder: false,
+            borderDash: [3],
+            zeroLineBorderDash: [3]
+          }
+        },{
+          id: 'right',
+          position: 'right',
+          ticks: {
+            maxTicksLimit: 5, // số lượng đưởng kẻ ngang ( chia tỉ lệ)
+            padding: 10,
+            // Include a dollar sign in the ticks
+            callback: function (value, index, values) {
+              return  number_format(value);
             }
           },
           gridLines: { // đường kẻ ngang 
@@ -175,7 +242,7 @@ var loop = setInterval(() => {
         }],
       },
       legend: { //chủ thích
-        display: false
+        display: true
       },
       tooltips: { //chi tiết dữ liệu trên line
         backgroundColor: "rgb(255,255,255)",
@@ -202,7 +269,8 @@ var loop = setInterval(() => {
   });
   document.documentElement.style.setProperty('--widthTemp', arr[0] + '%');
   document.documentElement.style.setProperty('--widthHum', arr1[0] + '%');
-}, 300)
+  document.documentElement.style.setProperty('--widthLight', arr2[19]/12 + '%');
+}, 1500)
 // Area Chart Example
 
 

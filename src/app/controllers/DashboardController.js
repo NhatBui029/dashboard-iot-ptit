@@ -1,5 +1,6 @@
 const User = require('../models/User');
-const { mongooseToObject } = require('../../public/util/mongoose')
+const Action = require('../models/Action');
+const { mongooseToObject, multipleMongooseToObject } = require('../../public/util/mongoose')
 
 class DashboardController {
     index(req, res, next) {
@@ -22,16 +23,47 @@ class DashboardController {
         res.redirect('/');
     }
 
+    profile(req, res, next) {
+        User.findOne({ user: req.cookies.user })
+        .then(user => {
+            res.render('profile', {
+                layout: 'main',
+                user: mongooseToObject(user),
+            });
+        })
+        .catch(next)
+    }
+
     tableSensorData(req, res, next) {
-        res.render('tableSensorData',{
+        res.render('tableSensorData', {
             layout: 'main',
         })
     }
 
-    tableActionHistory(req, res, next) {
-        res.render('tableActionHistory',{
-            layout: 'main',
+    actions(req, res, next) {
+        const action = new Action({
+            sensorId: "test1",
+            name: req.cookies.user,
+            action: req.body.action
         })
+        action.save()
+            .then(() => {
+                res.redirect('back')
+            })
+            .catch(next)
+    }
+
+    tableActionHistory(req, res, next) {
+        Promise.all([User.findOne({ user: req.cookies.user }), Action.find({})])
+            .then(([user, actions]) => {
+                actions.reverse();
+                res.render('tableActionHistory', {
+                    layout: 'main',
+                    actions: multipleMongooseToObject(actions),
+                    user: mongooseToObject(user)
+                })
+            })
+            .catch(next)
     }
 
     signin(req, res, next) {

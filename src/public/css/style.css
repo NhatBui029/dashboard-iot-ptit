@@ -65,6 +65,13 @@
 a:hover {
   text-decoration: none; }
 
+.header-fixed {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1; }
+
 .control-pan {
   height: 340px;
   padding: 20px 0px;
@@ -102,7 +109,6 @@ a:hover {
   height: 200px;
   opacity: 0.85;
   cursor: pointer;
-  background-image: url(img/fan.png);
   background-position: center;
   background-repeat: no-repeat;
   background-attachment: fixed;

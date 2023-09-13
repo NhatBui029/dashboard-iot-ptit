@@ -11,12 +11,14 @@
             </tr>
         </thead>
         <tbody>
+            {{#each actions}}
             <tr>
-                <td>1</td>
-                <td>Bùi Tuấn Nhật</td>
-                <td>Bật quạt</td>
-                <td> 16:30 1/2/3032</td>
+                <td>{{this.sensorId}}</td>
+                <td>{{this.name}}</td>
+                <td>{{this.action}}</td>
+                <td>{{formatDate this.createdAt}}</td>
             </tr>
+            {{/each}}
         </tbody>
     </table>
 </div>

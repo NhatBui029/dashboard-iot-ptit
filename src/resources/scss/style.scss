@@ -77,6 +77,13 @@ a:hover {
   text-decoration: none;
 }
 
+.header-fixed{
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
+}
 .control-pan {
   height: 340px;
   padding: 20px 0px;

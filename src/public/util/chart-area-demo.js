@@ -101,7 +101,7 @@ var loop = setInterval(() => {
         {
           label: "Temperature",
           lineTension: 0.3,
-          backgroundColor: "rgba(0,0,0,0.05",
+          backgroundColor: "rgba(0,0,0,0.01",
           borderColor: "rgba(78, 115, 223, 1)",
           pointRadius: 3,
           pointBackgroundColor: "rgba(78, 115, 223, 1)",
@@ -116,7 +116,7 @@ var loop = setInterval(() => {
         {
           label: "Humdity",
           lineTension: 0.3,
-          backgroundColor: "rgba(0,0,0,0.05",
+          backgroundColor: "rgba(0,0,0,0.01",
           borderColor: "green",
           pointRadius: 3,
           pointBackgroundColor: "green",

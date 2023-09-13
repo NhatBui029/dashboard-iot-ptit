@@ -7,13 +7,14 @@ const path = require('path')
 const db = require('./db/index')
 const route = require('./routes/index')
 const cookieParser = require('cookie-parser')
+const {formatDate} = require('../src/public/util/mongoose')
 
 app.engine(
   'hbs', 
   handlebars.engine({
     extname: '.hbs',
     helpers: {
-
+      formatDate : (date) => formatDate(date),
     }
   }),
 );

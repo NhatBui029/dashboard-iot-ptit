@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="/css/test.css">
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/table.css">
+    <link rel="stylesheet" href="/css/profile.css">
     <link rel="stylesheet" href="/css/sb-admin-2.min.css">
 
     <link
@@ -22,20 +23,25 @@
     <div id="wrapper">
         <div id="content-wrapper" class="d-flex flex-column">
             <div id="content">
-                {{>header}}
-                 {{{body}}}
+                <div class="header-fixed">
+                    {{>header}}
+                </div>
+                <div style="margin-top: 70px;">
+                    {{{body}}}
+                </div>
             </div>
             {{!-- {{>footer}} --}}
         </div>
     </div>
-    
-</body>
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-    <script src="vendor/chart.js/Chart.min.js"></script>
 
-    <script src="/util/chart-area-demo.js"></script>
-    <script src="/util/sb-admin-2.min.js"></script>
-    <script src="/util/style.js"></script>
+</body>
+<script src="vendor/jquery/jquery.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+<script src="vendor/chart.js/Chart.min.js"></script>
+
+<script src="/util/chart-area-demo.js"></script>
+<script src="/util/sb-admin-2.min.js"></script>
+<script src="/util/style.js"></script>
+
 </html>

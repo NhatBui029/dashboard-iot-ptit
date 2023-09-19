@@ -48,33 +48,31 @@ const sw2 = $(".slider2");
 sw2.click(() => {
   if (turnLight == 0) {
     lamp.src = "img/onLight.png";
-    fetch('/actions', {
+    fetch('/actionLed', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ action: 'Bật điện' }),
+      body: JSON.stringify({ action: 'on', message: 'Bật điện' }),
     })
       .then(response => response.json())
       .then(responseData => {
-
       })
       .catch(error => {
         console.error('Lỗi:', error);
-      });
+      });    
   }
   else {
     lamp.src = "img/offLight.png";
-    fetch('/actions', {
+    fetch('/actionLed', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ action: 'Tắt điện' }),
+      body: JSON.stringify({ action: 'off', message: 'Tắt điện' }),
     })
       .then(response => response.json())
       .then(responseData => {
-
       })
       .catch(error => {
         console.error('Lỗi:', error);

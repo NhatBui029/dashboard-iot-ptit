@@ -1,6 +1,3 @@
-
-
-// Set new default font family and font color to mimic Bootstrap's default styling
 Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
 Chart.defaults.global.defaultFontColor = '#858796';
 
@@ -58,8 +55,8 @@ const getTemp = ()=>{
   arr.forEach(data=>{
     temp.push(data.temperature)
   })
-  document.getElementById('temp').textContent = temp[0] + '°C';
-  document.documentElement.style.setProperty('--widthTemp', temp[0] + '%');
+  document.getElementById('temp').textContent = temp[19] + '°C';
+  document.documentElement.style.setProperty('--widthTemp', temp[19] + '%');
   temp.reverse();
   return temp;
 }
@@ -69,8 +66,8 @@ const getHum = ()=>{
   arr.forEach(data=>{
     hum.push(data.humidity)
   })
-  document.getElementById('hum').textContent = hum[0] + '%';
-  document.documentElement.style.setProperty('--widthHum', hum[0] + '%');
+  document.getElementById('hum').textContent = hum[19] + '%';
+  document.documentElement.style.setProperty('--widthHum', hum[19] + '%');
   hum.reverse();
   return hum;
 }
@@ -86,7 +83,6 @@ const getLight = ()=>{
 
 var loop = setInterval(() => {
   fetchData();
-  console.log(arr);
   var ctx = document.getElementById("myAreaChart");
   var myLineChart = new Chart(ctx, {
     type: 'line',

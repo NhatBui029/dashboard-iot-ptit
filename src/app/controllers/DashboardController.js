@@ -3,16 +3,17 @@ const Action = require('../models/Action');
 const Data = require('../models/Data');
 const { mongooseToObject, multipleMongooseToObject } = require('../../public/util/mongoose')
 
+
 class DashboardController {
     async index(req, res, next) {
         try {
-          await Data.deleteMany({ _id: { $nin: await Data.find().sort({ createdAt: -1 }).limit(20).select('_id').exec() }});
-          res.render('signin', { layout: 'login' });
+            await Data.deleteMany({ _id: { $nin: await Data.find().sort({ createdAt: -1 }).limit(20).select('_id').exec() } });
+            res.render('signin', { layout: 'login' });
         } catch (error) {
-          next(error);
+            next(error);
         }
-      }
-      
+    }
+
 
     main(req, res, next) {
         User.findOne({ user: req.cookies.user })
@@ -57,13 +58,17 @@ class DashboardController {
         const action = new Action({
             sensorId: "test1",
             name: req.cookies.user,
-            action: req.body.action
+            action: req.body.message
         })
         action.save()
             .then(() => {
                 res.redirect('back')
             })
             .catch(next)
+    }
+    actionLed(req,res,next){
+        const {action,mes} = req.body ;
+        client.publish('led',action)
     }
 
     tableActionHistory(req, res, next) {
@@ -142,17 +147,17 @@ class DashboardController {
     }
 
 
-    async getData(req, res, next)  {
+    async getData(req, res, next) {
         try {
-          const datas = await Data.find({}).sort({ createdAt: -1 }).limit(20);
-          datas.reverse();
-          const arr = datas.map(data => data.toObject());
-          res.status(200).json(arr);
+            const datas = await Data.find({}).sort({ createdAt: -1 }).limit(20);
+            datas.reverse();
+            const arr = datas.map(data => data.toObject());
+            res.status(200).json(arr);
         } catch (err) {
-          console.error(err);
-          res.status(500).json({ error: 'Internal server error' });
+            console.error(err);
+            res.status(500).json({ error: 'Internal server error' });
         }
-      };
+    };
 }
 
 module.exports = new DashboardController();

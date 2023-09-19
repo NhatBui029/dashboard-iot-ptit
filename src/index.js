@@ -42,7 +42,7 @@ app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
 
-const client = mqtt.connect('mqtt://192.168.161.247');
+global.client = mqtt.connect('mqtt://192.168.161.247');
 
 const topic = 'data';
 client.on('connect', () => {
@@ -56,7 +56,6 @@ client.on('connect', () => {
 });
 
 client.on('message', (topic, message) => {
-  //console.log(`Nhận được dữ liệu từ chủ đề ${topic}: ${message.toString()}`);
   dbController.updateData(topic,message);
 });
 
@@ -67,3 +66,7 @@ client.on('close', () => {
 client.on('error', (err) => {
   console.error('Lỗi kết nối MQTT:', err);
 });
+
+module.exports = {
+  getClient: () => client, 
+};

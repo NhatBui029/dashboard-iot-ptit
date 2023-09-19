@@ -1,3 +1,5 @@
+
+
 // Set new default font family and font color to mimic Bootstrap's default styling
 Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
 Chart.defaults.global.defaultFontColor = '#858796';
@@ -27,99 +29,66 @@ function number_format(number, decimals, dec_point, thousands_sep) {
   return s.join(dec);
 }
 
-var arr = [];
-arr.push(40);
-for (let i = 0; i < 19; i++) {
-  arr.unshift(arr[0] + Math.floor(Math.random() * 21) - 10);
-}
-var dem = 0;
-
-function randomdata() {
-  if (dem == 0) {
-    dem = dem + 1;
-    return arr;
-  }
-  else {
-    let m = arr[0];
-    for (let i = 1; i < 20; i++) {
-      let n = arr[i];
-      arr[i] = m;
-      m = n;
-    }
-    arr[0] = arr[0] + Math.floor(Math.random() * 11) - 5;
-    if(arr[0] < 0) arr[0] = -arr[0];
-    if(arr[0] > 100) arr[0] = arr[0] - 100;
-    document.getElementById('temp').textContent= arr[0]+'%';
-    return arr;
-  }
-}
-
-
-var arr1 = [];
-arr1.push(30);
-for (let i = 0; i < 19; i++) {
-  arr1.unshift(arr1[0] + Math.floor(Math.random() * 21) - 10);
-}
-var dem1 = 0;
-
-function randomdata1() {
-  if (dem1 == 0) {
-    dem1 = dem1 + 1;
-    return arr1;
-  }
-  else {
-    let m = arr1[0];
-    for (let i = 1; i < 20; i++) {
-      let n = arr1[i];
-      arr1[i] = m;
-      m = n;
-    }
-    arr1[0] = arr1[0] + Math.floor(Math.random() * 21) - 10;
-    if(arr1[0] < 0) arr1[0] = -arr1[0];
-    if(arr1[0] > 100) arr1[0] = arr1[0] - 100;
-    document.getElementById('hum').textContent= arr1[0]+'%';
-    return arr1;
-  }
-}
-
-var arr2 = [];
-arr2.push(500);
-for (let i = 0; i < 19; i++) {
-  arr2.unshift(arr2[0] + Math.floor(Math.random() * 200) - 100);
-}
-var dem2 = 0;
-
-function randomdata2() {
-  if (dem2 == 0) {
-    dem2 = dem2 + 1;
-    return arr2;
-  }
-  else {
-    let m = arr2[19];
-    for (let i = 18; i >=0; i--) {
-      let n = arr2[i];
-      arr2[i] = m;
-      m = n;
-    }
-    arr2[19] = arr2[19] + Math.floor(Math.random() * 200) - 100;
-    if(arr2[19] < 19) arr2[19] = -arr2[19];
-    if(arr2[19] > 1000) arr2[19] = arr2[19] - 1000;
-    document.getElementById('light').textContent= arr2[19]+'Lux';
-    return arr2;
-  }
-}
-
-function createLabels() {
+const createLabels = () => {
   let arr = [];
   for (let i = 0; i < 20; i++) {
     arr.push(i.toString());
   }
   return arr;
 }
+var arr;
+
+const fetchData = () => {
+  fetch('/getData', {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+    .then(response => response.json())
+    .then(datas => {
+      arr = [...datas]
+    }
+    )
+    .catch(err => console.error(err));
+};
+
+const getTemp = ()=>{
+  let temp = [];
+  arr.forEach(data=>{
+    temp.push(data.temperature)
+  })
+  document.getElementById('temp').textContent = temp[0] + '°C';
+  document.documentElement.style.setProperty('--widthTemp', temp[0] + '%');
+  temp.reverse();
+  return temp;
+}
+
+const getHum = ()=>{
+  let hum = [];
+  arr.forEach(data=>{
+    hum.push(data.humidity)
+  })
+  document.getElementById('hum').textContent = hum[0] + '%';
+  document.documentElement.style.setProperty('--widthHum', hum[0] + '%');
+  hum.reverse();
+  return hum;
+}
+const getLight = ()=>{
+  let light = [];
+  arr.forEach(data=>{
+    light.push(data.light)
+  })
+  document.getElementById('light').textContent = light[19] + 'Lux';
+  document.documentElement.style.setProperty('--widthLight', light[19]/12 + '%');
+  return light;
+}
 
 var loop = setInterval(() => {
+  fetchData();
+  console.log(arr);
   var ctx = document.getElementById("myAreaChart");
-  var myLineChart = new Chart(ctx, { 
+  var myLineChart = new Chart(ctx, {
     type: 'line',
     data: {
       labels: createLabels(),
@@ -138,7 +107,7 @@ var loop = setInterval(() => {
           pointHoverBorderColor: "rgba(78, 115, 223, 1)",
           pointHitRadius: 10,
           pointBorderWidth: 2,
-          data: randomdata(),
+          data: getTemp(),
           yAsixID: 'yLeft'
         },
         {
@@ -155,7 +124,7 @@ var loop = setInterval(() => {
           pointHoverBorderColor: "green",
           pointHitRadius: 10,
           pointBorderWidth: 2,
-          data: randomdata1(),
+          data: getHum(),
           yAxisID: 'left',
         },
         {
@@ -172,7 +141,7 @@ var loop = setInterval(() => {
           pointHoverBorderColor: "black",
           pointHitRadius: 10,
           pointBorderWidth: 2,
-          data: randomdata2(),
+          data: getLight(),
           yAxisID: 'right',
         }
       ],
@@ -200,18 +169,18 @@ var loop = setInterval(() => {
             drawBorder: false
           },
           ticks: {
-            maxTicksLimit: 7
+            maxTicksLimit: 10
           }
         }],
         yAxes: [{
           id: 'left',
           position: 'left',
           ticks: {
-            maxTicksLimit: 10, // số lượng đưởng kẻ ngang ( chia tỉ lệ)
+            maxTicksLimit: 5, // số lượng đưởng kẻ ngang ( chia tỉ lệ)
             padding: 10,
             // Include a dollar sign in the ticks
             callback: function (value, index, values) {
-              return  number_format(value) ;
+              return number_format(value);
             }
           },
           gridLines: { // đường kẻ ngang 
@@ -221,15 +190,14 @@ var loop = setInterval(() => {
             borderDash: [3],
             zeroLineBorderDash: [3]
           }
-        },{
+        }, {
           id: 'right',
           position: 'right',
           ticks: {
             maxTicksLimit: 5, // số lượng đưởng kẻ ngang ( chia tỉ lệ)
             padding: 10,
-            // Include a dollar sign in the ticks
             callback: function (value, index, values) {
-              return  number_format(value);
+              return number_format(value);
             }
           },
           gridLines: { // đường kẻ ngang 
@@ -261,35 +229,10 @@ var loop = setInterval(() => {
         callbacks: {
           label: function (tooltipItem, chart) {
             var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
-            return datasetLabel + ': $' + number_format(tooltipItem.yLabel);
+            return datasetLabel + ' : ' + number_format(tooltipItem.yLabel);
           }
         }
       }
     }
   });
-  document.documentElement.style.setProperty('--widthTemp', arr[0] + '%');
-  document.documentElement.style.setProperty('--widthHum', arr1[0] + '%');
-  document.documentElement.style.setProperty('--widthLight', arr2[19]/12 + '%');
-}, 1500)
-// Area Chart Example
-
-
-// const testChart = document.getElementById("test");
-// console.log(testChart)
-// let canvas = new Chart(testChart,{
-//   type: 'line',
-//   data: {
-//     labels: ['one', 'two', 'three', 'four', 'five', 'six'],
-//     datasets:[
-//       {
-//         label: "test 1",
-//         lineTension: 0.4 ,
-//         backgroundColor: 'rgba(78, 115, 223, 0.05',
-//         borderColor: 'red',
-//         pointBackgroundColor: 'red',
-//         pointBorderColor: 'red',
-//         data: [4,3,5,6,4,3]
-//       }
-//     ]
-//   }
-// })
+}, 3000);

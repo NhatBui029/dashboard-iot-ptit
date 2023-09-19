@@ -12,20 +12,15 @@
             </tr>
         </thead>
         <tbody>
+            {{#each datas}}
             <tr>
-                <td>1</td>
-                <td>30</td>
-                <td>50</td>
-                <td>170</td>
-                <td> 16:30 1/2/3032</td>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>30</td>
-                <td>50</td>
-                <td>170</td>
-                <td> 16:30 1/2/3032</td>
-            </tr>
+                <td>{{this.sensorId}}</td>
+                <td>{{this.temperature}}</td>
+                <td>{{this.humidity}}</td>
+                <td>{{this.light}}</td>
+                <td>{{formatDate this.createdAt}}</td>
+            </tr>          
+            {{/each}}
         </tbody>
     </table>
 </div>

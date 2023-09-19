@@ -1,11 +1,18 @@
 const User = require('../models/User');
 const Action = require('../models/Action');
+const Data = require('../models/Data');
 const { mongooseToObject, multipleMongooseToObject } = require('../../public/util/mongoose')
 
 class DashboardController {
-    index(req, res, next) {
-        res.render('signin', { layout: 'login' })
-    }
+    async index(req, res, next) {
+        try {
+          await Data.deleteMany({ _id: { $nin: await Data.find().sort({ createdAt: -1 }).limit(20).select('_id').exec() }});
+          res.render('signin', { layout: 'login' });
+        } catch (error) {
+          next(error);
+        }
+      }
+      
 
     main(req, res, next) {
         User.findOne({ user: req.cookies.user })
@@ -25,19 +32,25 @@ class DashboardController {
 
     profile(req, res, next) {
         User.findOne({ user: req.cookies.user })
-        .then(user => {
-            res.render('profile', {
-                layout: 'main',
-                user: mongooseToObject(user),
-            });
-        })
-        .catch(next)
+            .then(user => {
+                res.render('profile', {
+                    layout: 'main',
+                    user: mongooseToObject(user),
+                });
+            })
+            .catch(next)
     }
 
     tableSensorData(req, res, next) {
-        res.render('tableSensorData', {
-            layout: 'main',
-        })
+        Promise.all([User.findOne({ user: req.cookies.user }), Data.find({}).sort({ createdAt: -1 }).limit(20)])
+            .then(([user, datas]) => {
+                res.render('tableSensorData', {
+                    layout: 'main',
+                    user: mongooseToObject(user),
+                    datas: multipleMongooseToObject(datas)
+                })
+            })
+            .catch(next)
     }
 
     actions(req, res, next) {
@@ -115,6 +128,31 @@ class DashboardController {
             })
             .catch(next)
     }
+
+    updateData(topic, message) {
+        console.log(`Nhận được dữ liệu từ chủ đề ${topic}: ${message.toString()}`);
+        const json = JSON.parse(message);
+        const data = new Data({
+            sensorId: 'packetId' + Math.floor(Math.random() * 100001),
+            temperature: json.temp,
+            humidity: json.hum,
+            light: json.light
+        })
+        data.save();
+    }
+
+
+    async getData(req, res, next)  {
+        try {
+          const datas = await Data.find({}).sort({ createdAt: -1 }).limit(20);
+          datas.reverse();
+          const arr = datas.map(data => data.toObject());
+          res.status(200).json(arr);
+        } catch (err) {
+          console.error(err);
+          res.status(500).json({ error: 'Internal server error' });
+        }
+      };
 }
 
 module.exports = new DashboardController();

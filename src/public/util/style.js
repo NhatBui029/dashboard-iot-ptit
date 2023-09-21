@@ -1,4 +1,4 @@
-
+const socket = io();
 
 // $(document).ready(function () {
 let turnPan = 0;
@@ -7,79 +7,40 @@ const sw1 = $(".slider1");
 sw1.click(function () {
   if (turnPan == 0) {
     document.documentElement.style.setProperty('--degree', '360deg');
-
-    fetch('/actions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ action: 'Bật quạt' }),
-    })
-      .then(response => response.json())
-      .then(responseData => {
-
-      })
-      .catch(error => {
-        console.error('Lỗi:', error);
-      });
   } else {
     document.documentElement.style.setProperty('--degree', '0deg');
-
-    fetch('/actions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ action: 'Tắt quạt' }),
-    })
-      .then(response => response.json())
-      .then(responseData => {
-
-      })
-      .catch(error => {
-        console.error('Lỗi:', error);
-      });
   }
   turnPan = 1 - turnPan;
 });
 
-let turnLight = 0;
+
 const sw2 = $(".slider2");
+
 sw2.click(() => {
-  if (turnLight == 0) {
+  console.log('toggleLight');
+  socket.emit('control', 'toggleLight');
+});
+
+socket.on('status', data => {
+  if (data === 'on') {
     lamp.src = "img/onLight.png";
-    fetch('/actionLed', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ action: 'on', message: 'Bật điện' }),
-    })
-      .then(response => response.json())
-      .then(responseData => {
-      })
-      .catch(error => {
-        console.error('Lỗi:', error);
-      });    
-  }
-  else {
+  } else {
     lamp.src = "img/offLight.png";
-    fetch('/actionLed', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ action: 'off', message: 'Tắt điện' }),
-    })
-      .then(response => response.json())
-      .then(responseData => {
-      })
-      .catch(error => {
-        console.error('Lỗi:', error);
-      });
   }
-  turnLight = 1 - turnLight;
-})
+});
+
+
+// ws.onmessage = (event) => {
+//   const data = JSON.parse(event.data);
+//   const lightStatus = data.lightStatus;
+
+//   if (lightStatus == 'on') {
+//     lamp.src = "img/onLight.png";
+//   } else {
+//     lamp.src = "img/offLight.png";
+//   }
+// };
+
 // });
 
 

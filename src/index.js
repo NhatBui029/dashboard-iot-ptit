@@ -10,6 +10,10 @@ const route = require('./routes/index')
 const cookieParser = require('cookie-parser')
 const { formatDate } = require('../src/public/util/mongoose')
 const dbController = require('../src/app/controllers/DashboardController')
+const axios = require('axios');
+
+
+const socketio = require("socket.io")
 
 app.engine(
   'hbs',
@@ -38,35 +42,53 @@ app.use(
 
 route(app);
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
 
-global.client = mqtt.connect('mqtt://192.168.161.247');
+const io = socketio(server);
+let currentLightStatus = false;
 
-const topic = 'data';
-client.on('connect', () => {
-  client.subscribe(topic, (err) => {
-    if (err) {
-      console.error('Sub failed', err);
-    } else {
-      console.log('Sub successful');
-    }  
+io.on('connection', (socket) => {
+  mqttClient.publish('led', currentLightStatus ? 'on':'off');
+  console.log(`New connection: ${socket.id}`);
+  socket.on('control',data=>{
+    if(data == 'toggleLight'){
+      currentLightStatus = !currentLightStatus;
+      mqttClient.publish('led', currentLightStatus ? 'on':'off');
+    }
+  })
+})
+
+global.mqttClient = mqtt.connect('mqtt://192.168.115.247');
+
+const topics = ['data', 'ledok', 'fanok'];
+mqttClient.on('connect', () => {
+  topics.forEach((topic) => {
+    mqttClient.subscribe(topic, (err) => {
+      if (err) {
+        console.error('Sub failed', err);
+      } else {
+        console.log(`Sub successful with topic : ${topic}`);
+      }
+    })
   })
 });
 
-client.on('message', (topic, message) => {
-  dbController.updateData(topic,message);
+
+mqttClient.on('message', (topic, message) => {
+  if (topic === 'data') dbController.updateData(topic, message);
+  else if (topic === 'ledok') {
+    io.emit('status',message.toString());
+  }
 });
 
-client.on('close', () => {
+mqttClient.on('close', () => {
   console.log('Đã mất kết nối tới MQTT broker');
 });
 
-client.on('error', (err) => {
+mqttClient.on('error', (err) => {
   console.error('Lỗi kết nối MQTT:', err);
 });
 
-module.exports = {
-  getClient: () => client, 
-};
+

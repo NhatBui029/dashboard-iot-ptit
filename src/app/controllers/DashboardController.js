@@ -3,11 +3,13 @@ const Action = require('../models/Action');
 const Data = require('../models/Data');
 const { mongooseToObject, multipleMongooseToObject } = require('../../public/util/mongoose')
 
+var user;
 
 class DashboardController {
     async index(req, res, next) {
         try {
             await Data.deleteMany({ _id: { $nin: await Data.find().sort({ createdAt: -1 }).limit(20).select('_id').exec() } });
+            await Action.deleteMany({ _id: { $nin: await Action.find().sort({ createdAt: -1 }).limit(20).select('_id').exec() } });
             res.render('signin', { layout: 'login' });
         } catch (error) {
             next(error);
@@ -16,6 +18,7 @@ class DashboardController {
 
 
     main(req, res, next) {
+        user = req.cookies.user;
         User.findOne({ user: req.cookies.user })
             .then(user => {
                 res.render('home', {
@@ -54,27 +57,42 @@ class DashboardController {
             .catch(next)
     }
 
-    actions(req, res, next) {
-        const action = new Action({
-            sensorId: "test1",
-            name: req.cookies.user,
-            action: req.body.message
-        })
-        action.save()
-            .then(() => {
-                res.redirect('back')
-            })
-            .catch(next)
+
+    actions(message) {
+
     }
-    actionLed(req,res,next){
-        const {action,mes} = req.body ;
-        client.publish('led',action)
+
+    actionLed(req, res, next) {
+        const { action, mes } = req.body;
+        client.publish('led', action);
+    }
+
+    actionLedOk(req, res, next) {
+        const username = user;
+    if (!username) {
+        return res.status(400).json({ message: 'Không tìm thấy cookies' });
+    }
+    const action = new Action({
+        sensorId: 'packetId' + Math.floor(Math.random() * 1000),
+        name: username,
+        action: req.body.message === 'on' ? 'Bật điện' : 'Tắt điện'
+    });
+
+    action.save()
+        .then(() => {
+            next();
+        })
+        .catch(err => {
+            console.error(err);
+            res.status(500).json({ message: 'Lỗi lưu action vào cơ sở dữ liệu' });
+        });
+        
     }
 
     tableActionHistory(req, res, next) {
-        Promise.all([User.findOne({ user: req.cookies.user }), Action.find({})])
+        Promise.all([User.findOne({ user: req.cookies.user }), Action.find({}).sort({ createdAt: -1 }).limit(20)])
             .then(([user, actions]) => {
-                actions.reverse();
+                
                 res.render('tableActionHistory', {
                     layout: 'main',
                     actions: multipleMongooseToObject(actions),

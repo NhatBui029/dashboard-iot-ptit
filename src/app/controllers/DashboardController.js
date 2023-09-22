@@ -58,8 +58,13 @@ class DashboardController {
     }
 
 
-    actions(message) {
-
+    actions(req, res, next) {
+        const action = new Action({
+            sensorId: 'packetId' + Math.floor(Math.random() * 1000),
+            name: req.cookies.user,
+            action: req.body.action
+        });
+        action.save()
     }
 
     actionLed(req, res, next) {
@@ -67,32 +72,10 @@ class DashboardController {
         client.publish('led', action);
     }
 
-    actionLedOk(req, res, next) {
-        const username = user;
-    if (!username) {
-        return res.status(400).json({ message: 'Không tìm thấy cookies' });
-    }
-    const action = new Action({
-        sensorId: 'packetId' + Math.floor(Math.random() * 1000),
-        name: username,
-        action: req.body.message === 'on' ? 'Bật điện' : 'Tắt điện'
-    });
-
-    action.save()
-        .then(() => {
-            next();
-        })
-        .catch(err => {
-            console.error(err);
-            res.status(500).json({ message: 'Lỗi lưu action vào cơ sở dữ liệu' });
-        });
-        
-    }
-
     tableActionHistory(req, res, next) {
         Promise.all([User.findOne({ user: req.cookies.user }), Action.find({}).sort({ createdAt: -1 }).limit(20)])
             .then(([user, actions]) => {
-                
+
                 res.render('tableActionHistory', {
                     layout: 'main',
                     actions: multipleMongooseToObject(actions),

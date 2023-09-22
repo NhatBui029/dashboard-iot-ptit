@@ -22,26 +22,28 @@ sw2.click(() => {
 });
 
 socket.on('status', data => {
+  let action;
   if (data === 'on') {
     lamp.src = "img/onLight.png";
+    action = 'Bật điện'
   } else {
     lamp.src = "img/offLight.png";
+    action = 'Tắt điện'
   }
+  fetch('/actions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ action: action })
+  })
+    .then(response => response.json())
+    .then(datas => {
+    }
+    )
+    .catch(err => console.error(err));
 });
 
-
-// ws.onmessage = (event) => {
-//   const data = JSON.parse(event.data);
-//   const lightStatus = data.lightStatus;
-
-//   if (lightStatus == 'on') {
-//     lamp.src = "img/onLight.png";
-//   } else {
-//     lamp.src = "img/offLight.png";
-//   }
-// };
-
-// });
 
 
 const circle = document.querySelector(".circle");

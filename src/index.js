@@ -48,14 +48,22 @@ const server = app.listen(port, () => {
 
 const io = socketio(server);
 let currentLightStatus = false;
+let currentFanStatus = false;
 
 io.on('connection', (socket) => {
-  mqttClient.publish('led', currentLightStatus ? 'on':'off');
-  console.log(`New connection: ${socket.id}`);
-  socket.on('control',data=>{
-    if(data == 'toggleLight'){
+  mqttClient.publish('fan', currentFanStatus ? 'on' : 'off');
+  mqttClient.publish('led', currentLightStatus ? 'on' : 'off');
+
+  //console.log(`New connection: ${socket.id}`);
+
+  socket.on('control', data => {
+    if (data == 'toggleFan') {
+      currentFanStatus = !currentFanStatus;
+      mqttClient.publish('fan', currentFanStatus ? 'on' : 'off');
+      console.log(currentFanStatus);
+    } else if (data == 'toggleLight') {
       currentLightStatus = !currentLightStatus;
-      mqttClient.publish('led', currentLightStatus ? 'on':'off');
+      mqttClient.publish('led', currentLightStatus ? 'on' : 'off');
     }
   })
 })
@@ -79,7 +87,9 @@ mqttClient.on('connect', () => {
 mqttClient.on('message', (topic, message) => {
   if (topic === 'data') dbController.updateData(topic, message);
   else if (topic === 'ledok') {
-    io.emit('status',message.toString());
+    io.emit('statusLed', message.toString());
+  } else if (topic === 'fanok') {
+    io.emit('statusFan', message.toString());
   }
 });
 

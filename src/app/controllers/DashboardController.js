@@ -142,7 +142,8 @@ class DashboardController {
             sensorId: 'packetId' + Math.floor(Math.random() * 100001),
             temperature: json.temp,
             humidity: json.hum,
-            light: json.light
+            light: json.light,
+            gas: json.gas
         })
         data.save();
     }

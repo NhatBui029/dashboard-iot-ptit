@@ -80,6 +80,16 @@ const getLight = ()=>{
   document.documentElement.style.setProperty('--widthLight', light[19]/12 + '%');
   return light;
 }
+const getGas = ()=>{
+  let gas = [];
+  arr.forEach(data=>{
+    gas.push(parseInt(data.gas/10))
+  })
+  document.getElementById('gas').textContent = gas[19] + '%LEL';
+  document.documentElement.style.setProperty('--widthGas', gas[19] + '%');
+  gas.reverse();
+  return gas;
+}
 
 var loop = setInterval(() => {
   fetchData();
@@ -140,6 +150,24 @@ var loop = setInterval(() => {
           data: getLight(),
           yAxisID: 'right',
         }
+        // ,
+        // {
+        //   label: "Gas",
+        //   lineTension: 0.3,
+        //   backgroundColor: "rgba(0,0,0,0.01",
+        //   borderColor: "#6f42c1",
+        //   pointRadius: 0,
+        //   borderWidth: 2,
+        //   pointBackgroundColor: "#6f42c1",
+        //   pointBorderColor: "#6f42c1",
+        //   pointHoverRadius: 3,
+        //   pointHoverBackgroundColor: "#6f42c1",
+        //   pointHoverBorderColor: "#6f42c1",
+        //   pointHitRadius: 10,
+        //   pointBorderWidth: 2,
+        //   data: getGas(),
+        //   yAxisID: 'left',
+        // }
       ],
     },
     options: {

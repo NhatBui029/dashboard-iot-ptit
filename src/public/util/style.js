@@ -1,16 +1,34 @@
 const socket = io();
 
 // $(document).ready(function () {
-let turnPan = 0;
 const sw1 = $(".slider1");
 
-sw1.click(function () {
-  if (turnPan == 0) {
+sw1.click(() => {
+  console.log('toggleFan');
+  socket.emit('control', 'toggleFan');
+});
+
+socket.on('statusFan', data => {
+  let action;
+  if (data === 'on') {
     document.documentElement.style.setProperty('--degree', '360deg');
+    action = 'Bật quạt'
   } else {
     document.documentElement.style.setProperty('--degree', '0deg');
+    action = 'Tắt quạt'
   }
-  turnPan = 1 - turnPan;
+  fetch('/actions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ action: action })
+  })
+    .then(response => response.json())
+    .then(datas => {
+    }
+    )
+    .catch(err => console.error(err));
 });
 
 
@@ -21,7 +39,7 @@ sw2.click(() => {
   socket.emit('control', 'toggleLight');
 });
 
-socket.on('status', data => {
+socket.on('statusLed', data => {
   let action;
   if (data === 'on') {
     lamp.src = "img/onLight.png";

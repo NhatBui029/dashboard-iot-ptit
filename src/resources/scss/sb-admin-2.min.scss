@@ -42,6 +42,7 @@
     --widthTemp : 50%;
     --widthHum : 50%;
     --widthLight : 50%;
+    --widthGas : 50%;
   }
   
   *,
@@ -7072,7 +7073,11 @@
     background: linear-gradient(to right, #000, #fff) !important;
     width: var(--widthLight);
   }
-  
+  .bg-info4 {
+    background: linear-gradient(to right, #818183, #6f42c1) !important;
+    width: var(--widthGas);
+  }
+
   a.bg-info3:focus,
   a.bg-info3:hover,
   button.bg-info3:focus,

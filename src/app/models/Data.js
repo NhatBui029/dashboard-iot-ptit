@@ -9,7 +9,8 @@ const Data = new Schema({
     sensorId: {type: String},
     temperature: {type: Number},
     humidity: {type: Number},
-    light: {type: Number}
+    light: {type: Number},
+    gas: {type: Number}
 },{
     timestamps: true,
 });

@@ -77,7 +77,7 @@ const getLight = ()=>{
     light.push(data.light)
   })
   document.getElementById('light').textContent = light[19] + 'Lux';
-  document.documentElement.style.setProperty('--widthLight', light[19]/12 + '%');
+  document.documentElement.style.setProperty('--widthLight', light[19]/10 + '%');
   return light;
 }
 const getGas = ()=>{
@@ -259,4 +259,4 @@ var loop = setInterval(() => {
       }
     }
   });
-}, 3000);
+}, 1000);

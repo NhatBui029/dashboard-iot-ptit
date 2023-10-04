@@ -8,10 +8,8 @@ const mqtt = require('mqtt')
 const db = require('./db/index')
 const route = require('./routes/index')
 const cookieParser = require('cookie-parser')
-const { formatDate } = require('../src/public/util/mongoose')
+const util = require('../src/public/util/mongoose')
 const dbController = require('../src/app/controllers/DashboardController')
-const axios = require('axios');
-
 
 const socketio = require("socket.io")
 
@@ -20,7 +18,8 @@ app.engine(
   handlebars.engine({
     extname: '.hbs',
     helpers: {
-      formatDate: (date) => formatDate(date),
+      formatDate: (date) => util.formatDate(date),
+      sortTable:  (field ,page, sort) =>util.sortTable(field,page,sort)
     }
   }),
 );
@@ -39,7 +38,6 @@ app.use(
   cookieParser(),
   express.static(path.join(__dirname, 'public'))
 );
-
 route(app);
 
 const server = app.listen(port, () => {
@@ -49,6 +47,7 @@ const server = app.listen(port, () => {
 const io = socketio(server);
 let currentLightStatus = false;
 let currentFanStatus = false;
+let currentAddLedStatus = false;
 
 io.on('connection', (socket) => {
   mqttClient.publish('fan', currentFanStatus ? 'on' : 'off');
@@ -60,15 +59,17 @@ io.on('connection', (socket) => {
     if (data == 'toggleFan') {
       currentFanStatus = !currentFanStatus;
       mqttClient.publish('fan', currentFanStatus ? 'on' : 'off');
-      console.log(currentFanStatus);
     } else if (data == 'toggleLight') {
       currentLightStatus = !currentLightStatus;
       mqttClient.publish('led', currentLightStatus ? 'on' : 'off');
+    } else if(data == 'toggleAddLed'){
+      currentAddLedStatus = !currentAddLedStatus;
+      mqttClient.publish('addLed', currentAddLedStatus ? 'on' : 'off');
     }
   })
 })
 
-global.mqttClient = mqtt.connect('mqtt://192.168.115.247');
+global.mqttClient = mqtt.connect('mqtt://192.168.227.247');
 
 const topics = ['data', 'ledok', 'fanok'];
 mqttClient.on('connect', () => {

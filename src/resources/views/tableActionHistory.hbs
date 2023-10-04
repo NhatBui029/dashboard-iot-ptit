@@ -1,6 +1,16 @@
 <div id="table">
     <h1>Action History</h1>
 
+    <form action="/filter/tableActionHistory?page=1" method="post">
+        <label for="startTime">Thời gian bắt đầu:</label>
+        <input type="datetime-local" id="startTime" name="startTime" required><br><br>
+
+        <label for="endTime">Thời gian kết thúc:</label>
+        <input type="datetime-local" id="endTime" name="endTime" required><br><br>
+
+        <button type="submit">Lọc dữ liệu</button>
+    </form>
+
     <table id="keywords" cellspacing="0" cellpadding="0">
         <thead>
             <tr>
@@ -21,4 +31,33 @@
             {{/each}}
         </tbody>
     </table>
+    <nav aria-label="..." class="d-flex justify-content-center">
+        <ul class="pagination">
+            <li class="page-item">
+                <a class="page-link" href="/tableActionHistory?page=1">First</a>
+            </li>
+            <li class="page-item previous">
+                <a class="page-link" href="/tableActionHistory?page={{pagePrevious}}">Previous</a>
+            </li>
+            <li class="page-item">
+                {{#if pageLeft }}
+                <a class="page-link" href="/tableActionHistory?page={{pageLeft}}">{{pageLeft}}</a>
+                {{/if}}
+            </li>
+            <li class="page-item active">
+                <span class="page-link" id="page"> {{pageNumber}}</span>
+            </li>
+            <li class="page-item">
+                {{#if pageRight }}
+                <a class="page-link" href="/tableActionHistory?page={{pageRight}}">{{pageRight}}</a>
+                {{/if}}
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="/tableActionHistory?page={{pageNext}}">Next</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="/tableActionHistory?page={{pageLast}}">Last</a>
+            </li>
+        </ul>
+    </nav>
 </div>

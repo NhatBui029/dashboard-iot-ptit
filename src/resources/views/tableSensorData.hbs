@@ -4,11 +4,21 @@
     <table id="keywords" cellspacing="0" cellpadding="0">
         <thead>
             <tr>
-                <th><span>Sensor ID</span></th>
-                <th><span>Nhiệt độ(°C)</span></th>
-                <th><span>Độ ẩm (%)</span></th>
-                <th><span>Ánh sáng (Lux)</span></th>
-                <th><span>Thời gian</span></th>
+                <th> Sensor ID 
+                    {{{sortTable 'sensorId' pageNumber _sort}}}
+                </th>
+                <th> Nhiệt độ(°C) 
+                    {{{sortTable 'temperature' pageNumber _sort}}}
+                </th>
+                <th>Độ ẩm (%) 
+                    {{{sortTable 'humidity' pageNumber _sort}}}
+                </th>
+                <th>Ánh sáng (Lux) 
+                    {{{sortTable 'light' pageNumber _sort}}}
+                </th>
+                <th>Thời gian 
+                    {{{sortTable 'createdAt' pageNumber _sort}}}
+                </th>
             </tr>
         </thead>
         <tbody>
@@ -19,8 +29,37 @@
                 <td>{{this.humidity}}</td>
                 <td>{{this.light}}</td>
                 <td>{{formatDate this.createdAt}}</td>
-            </tr>          
+            </tr>
             {{/each}}
         </tbody>
     </table>
+    <nav aria-label="..." class="d-flex justify-content-center">
+        <ul class="pagination">
+            <li class="page-item">
+                <a class="page-link" href="/tableSensorData?page=1">First</a>
+            </li>
+            <li class="page-item previous">
+                <a class="page-link" href="/tableSensorData?page={{pagePrevious}}">Previous</a>
+            </li>
+            <li class="page-item">
+                {{#if pageLeft }}
+                <a class="page-link" href="/tableSensorData?page={{pageLeft}}">{{pageLeft}}</a>
+                {{/if}}
+            </li>
+            <li class="page-item active">
+                <span class="page-link" id="page">{{pageNumber}} </span>
+            </li>
+            <li class="page-item">
+                {{#if pageRight }}
+                <a class="page-link" href="/tableSensorData?page={{pageRight}}">{{pageRight}}</a>
+                {{/if}}
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="/tableSensorData?page={{pageNext}}">Next</a>
+            </li>
+            <li class="page-item ">
+                <a class="page-link" href="/tableSensorData?page={{pageLast}}">Last</a>
+            </li>
+        </ul>
+    </nav>
 </div>

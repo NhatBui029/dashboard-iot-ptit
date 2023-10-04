@@ -25,9 +25,7 @@ socket.on('statusFan', data => {
     body: JSON.stringify({ action: action })
   })
     .then(response => response.json())
-    .then(datas => {
-    }
-    )
+    .then(datas => {})
     .catch(err => console.error(err));
 });
 
@@ -61,6 +59,15 @@ socket.on('statusLed', data => {
     )
     .catch(err => console.error(err));
 });
+
+const sw3 = $(".slider3");
+
+sw3.click(() => {
+  console.log('toggleAddLed');
+  socket.emit('control', 'toggleAddLed');
+});
+
+
 
 
 

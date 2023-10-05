@@ -1,4 +1,4 @@
-$(document).ready(function () {
+// $(document).ready(function () {
   const pageElement = document.getElementById('page');
   const pagePrevious = parseInt(pageElement.textContent) - 1;
   const previous = document.getElementsByClassName('previous');
@@ -9,5 +9,5 @@ $(document).ready(function () {
     }
   }
 
-});
+// });
 

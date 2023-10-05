@@ -4,7 +4,7 @@ const Data = require('../models/Data');
 const { mongooseToObject, multipleMongooseToObject } = require('../../public/util/mongoose')
 const util = require('../../public/util/mongoose')
 
-const PAGE_MAX = 10;
+const PAGE_MAX = 20;
 
 const sortCriteria = [
     { column: 'createdAt', order: 'desc' },
@@ -78,7 +78,7 @@ class DashboardController {
 
         Promise.all([
             User.findOne({ user: req.cookies.user }),
-            Data.find({}).sort(sortObject).skip(PAGE_MAX * (page - 1)).limit(20),
+            Data.find({}).sort(sortObject).skip(PAGE_MAX * (page - 1)).limit(PAGE_MAX),
             Data.countDocuments()
         ])
             .then(([user, datas, count]) => {
@@ -102,7 +102,7 @@ class DashboardController {
 
         Promise.all([
             User.findOne({ user: req.cookies.user }),
-            Action.find({}).sort({ createdAt: -1 }).limit(20),
+            Action.find({}).sort({ createdAt: -1 }).skip(PAGE_MAX * (page - 1)).limit(PAGE_MAX),
             Action.countDocuments()
         ])
             .then(([user, actions, count]) => {
@@ -147,7 +147,7 @@ class DashboardController {
                     { humidity: parseFloat(searchTerm) },
                     { light: parseFloat(searchTerm) },
                 ]
-            })
+            }).sort({ createdAt: -1 })
         ])
             .then(([user, datas]) => {
                 res.render('tableSensorData', {
@@ -174,7 +174,7 @@ class DashboardController {
                     $gte: new Date(startTime),
                     $lte: new Date(endTime),
                 },
-            })
+            }).sort({ createdAt: -1 })
         ]).then(([user, actions]) => {
             res.render('tableActionHistory', {
                 layout: 'main',

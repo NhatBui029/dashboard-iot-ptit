@@ -1,3 +1,4 @@
+
 const socket = io();
 
 // $(document).ready(function () {
@@ -33,7 +34,6 @@ socket.on('statusFan', data => {
 const sw2 = $(".slider2");
 
 sw2.click(() => {
-  console.log('toggleLight');
   socket.emit('control', 'toggleLight');
 });
 
@@ -67,8 +67,41 @@ sw3.click(() => {
   socket.emit('control', 'toggleAddLed');
 });
 
+socket.on('statusAddLed', data => {
+  console.log("add led");
+  let action;
+  if (data === 'on') {
+    addLed.src = "img/onLight.png";
+    action = 'Bật điện 2'
+  } else {
+    addLed.src = "img/offLight.png";
+    action = 'Tắt điện 2'
+  }
+  fetch('/actions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ action: action })
+  })
+    .then(response => response.json())
+    .then(datas => {
+    }
+    )
+    .catch(err => console.error(err));
+});
 
-
+socket.on('canhbao', data => {
+  if (data === 'on') {
+    // lamp.src = "img/onLight.png";
+    // addLed.src = "img/onLight.png";
+    document.documentElement.style.setProperty('--canhbao', 'red'); // Sửa thành 'red'
+  } else {
+    document.documentElement.style.setProperty('--canhbao', 'white'); // Sửa thành 'white'
+    // lamp.src = "img/offLight.png";
+    // addLed.src = "img/offLight.png";
+  }
+});
 
 
 const circle = document.querySelector(".circle");

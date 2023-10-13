@@ -1,5 +1,13 @@
-@import 'variable';
+:root {
+    --canhbao: white;
+}
 
-h1{
-    color: $color;
+#fan{
+    background-color: var(--canhbao);
+}
+#led1{
+    background-color: var(--canhbao);
+}
+#led2{
+    background-color: var(--canhbao);
 }

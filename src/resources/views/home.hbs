@@ -4,7 +4,7 @@
     <div class="row">
 
         <!-- nhiệt độ -->
-        <div class="col-xl-4 col-md-6 mb-4">
+        <div class="col-xl-3 col-md-6 mb-4">
             <div class="card border-left-primary shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
@@ -32,7 +32,7 @@
         </div>
 
         <!-- độ ẩm -->
-        <div class="col-xl-4 col-md-6 mb-4">
+        <div class="col-xl-3 col-md-6 mb-4">
             <div class="card border-left-success shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
@@ -60,7 +60,7 @@
         </div>
 
         <!-- ánh sáng -->
-        <div class="col-xl-4 col-md-6 mb-4">
+        <div class="col-xl-3 col-md-6 mb-4">
             <div class="card border-left-info shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
@@ -88,16 +88,16 @@
         </div>
 
         {{!-- khí gas --}}
-        {{!-- <div class="col-xl-3 col-md-6 mb-4">
+        <div class="col-xl-3 col-md-6 mb-4">
             <div class="card border-left-info shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Gas
-                                (Khí ga)</div>
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Độ bụi
+                                </div>
                             <div class="row no-gutters align-items-center">
                                 <div class="col-auto">
-                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800" id="gas">50 %LEL</div>
+                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800" id="gas">5</div>
                                 </div>
                                 <div class="col">
                                     <div class="progress progress-sm mr-2">
@@ -113,7 +113,7 @@
                     </div>
                 </div>
             </div>
-        </div> --}}
+        </div>
 
 
     </div>
@@ -123,8 +123,8 @@
     <div class="row">
 
         <!-- Area Chart -->
-        <div class="col-xl-9 col-lg-7 ">
-            <div class="card shadow mb-4">
+        <div class="col-xl-9 col-lg-7 row">
+            <div class="card shadow mb-4 col-xl-6">
                 <!-- Card Header - Dropdown -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                     <h6 class="m-0 font-weight-bold text-primary">Chart</h6>
@@ -143,7 +143,7 @@
                 </div>
             </div>
 
-            {{!-- <div class="card shadow mb-4 col-xl-6">
+            <div class="card shadow mb-4 col-xl-6">
                 <!-- Card Header - Dropdown -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                     <h6 class="m-0 font-weight-bold text-primary">Chart</h6>
@@ -160,14 +160,14 @@
                         <canvas id="myAreaChart2"></canvas>
                     </div>
                 </div>
-            </div> --}}
+            </div>
         </div>
 
         <!-- Pie Chart -->
         <div class="col-xl-3 col-lg-5">
             <!-- Card Body -->
 
-            <div class="card shadow control-pan">
+            <div class="card shadow control-pan" id="fan">
                 <div class="fan">
                     <img src="img/fangrid.png" class="grid" />
                     <div class="circle" style="background-image: url(img/fan.png);"></div>
@@ -181,7 +181,7 @@
                     </div>
                 </div>
             </div>
-            <div class="card shadow control-light">
+            <div class="card shadow control-light" id="led1">
                 <label class="switch swith2">
                     <input type="checkbox">
                     <span class="slider slider2"></span>
@@ -189,13 +189,13 @@
                 <img src="img/offLight.png" id="lamp">
             </div>
 
-            {{!-- <div class="card shadow control-light">
+             <div class="card shadow control-light" id="led2">
                 <label class="switch swith2">
                     <input type="checkbox">
                     <span class="slider slider3"></span>
                 </label>
                 <img src="img/offLight.png" id="addLed">
-            </div> --}}
+            </div> 
         </div>
     </div>
 </div>

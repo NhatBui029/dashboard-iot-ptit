@@ -142,7 +142,7 @@ class DashboardController {
             User.findOne({ user: req.cookies.user }),
             Data.find({
                 $or: [
-                    { sensorId: { $regex: new RegExp(searchTerm, "i") } },
+                    // { sensorId: { $regex: new RegExp(searchTerm, "i") } },
                     { temperature: parseFloat(searchTerm) },
                     { humidity: parseFloat(searchTerm) },
                     { light: parseFloat(searchTerm) },

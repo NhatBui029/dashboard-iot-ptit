@@ -6,7 +6,7 @@
 
 #define WIFI_SSID "aa"
 #define WIFI_PASSWORD "12345678"
-#define MQTT_HOST IPAddress(192, 168, 115, 247)
+#define MQTT_HOST IPAddress(192, 168, 111, 247)
 #define MQTT_PORT 1883
 #define TOPIC "data"
 
@@ -14,8 +14,13 @@
 #define DHTTYPE DHT11
 #define LED 5
 #define FAN 4
+#define ADDLED 0
+
 bool ledState = false;
 bool previousLedState = false;
+
+bool addLedState = false;
+bool addPreviousLedState = false;
 
 bool fanState = false;
 bool previousFanState = false;
@@ -69,6 +74,7 @@ void onMqttConnect(bool sessionPresent) {
   Serial.print("Session present: ");
   Serial.println(sessionPresent);
   mqttClient.subscribe("led", 0);
+  mqttClient.subscribe("addLed", 0);
   mqttClient.subscribe("fan", 0);
 }
 
@@ -133,6 +139,17 @@ void onMqttMessage(char* topic, char* payload, AsyncMqttClientMessageProperties 
     }
     Serial.println("LED State: " + String(ledState ? "ON" : "OFF"));
   }
+
+  if (strcmp(topic, "addLed") == 0) {
+    if (message == "on") {
+      digitalWrite(ADDLED, HIGH);  // Bật đèn
+      addLedState = true;
+    } else if (message == "off") {
+      digitalWrite(ADDLED, LOW);  // Tắt đèn
+      addLedState = false;
+    }
+    Serial.println("ADDLED State: " + String(addLedState ? "ON" : "OFF"));
+  }
 }
 
 void setup() {
@@ -140,6 +157,9 @@ void setup() {
   dht.begin();
   pinMode(LED, OUTPUT);
   digitalWrite(LED, LOW);
+
+  pinMode(ADDLED, OUTPUT);
+  digitalWrite(ADDLED, LOW);
 
   pinMode(FAN, OUTPUT);
   digitalWrite(FAN, LOW);
@@ -177,10 +197,35 @@ void loop() {
     Serial.println(packetIdPub);
   }
 
+  if (addLedState != addPreviousLedState) {
+    addPreviousLedState = addLedState;
+    String addLedMessage = (addLedState ? "on" : "off");
+    uint16_t packetIdPub = mqttClient.publish("addledok", 1, true, addLedMessage.c_str());
+    Serial.println("Published LED State: " + addLedMessage);
+    Serial.println(packetIdPub);
+  }
+
 
   int hum = dht.readHumidity();
   int temp = dht.readTemperature();
   int light = analogRead(A0);
+  int gas = random(10);
+
+
+  if(light< 1000){
+    String canhbao = "on";
+    digitalWrite(FAN, HIGH); 
+    digitalWrite(LED, HIGH);
+    digitalWrite(ADDLED, HIGH);
+    uint16_t packetIdPub = mqttClient.publish("canhbao", 1, true, canhbao.c_str());
+  }
+  else {
+    String canhbao = "off";
+    digitalWrite(FAN, LOW); 
+    digitalWrite(LED, LOW);
+    digitalWrite(ADDLED, LOW);
+    uint16_t packetIdPub = mqttClient.publish("canhbao", 1, true, canhbao.c_str());
+  }
 
   if (isnan(hum) || isnan(temp) || isnan(light)) {
     Serial.println("Read data failed !!");
@@ -188,6 +233,7 @@ void loop() {
     doc["temp"] = temp;
     doc["hum"] = hum;
     doc["light"] = light;
+    doc["gas"] = gas;
 
     String jsonString = JSON.stringify(doc);
     uint16_t packetIdPub = mqttClient.publish(TOPIC, 1, true, jsonString.c_str());

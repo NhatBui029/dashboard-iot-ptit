@@ -48,10 +48,12 @@ const io = socketio(server);
 let currentLightStatus = false;
 let currentFanStatus = false;
 let currentAddLedStatus = false;
+let canhbao = false;
 
 io.on('connection', (socket) => {
   mqttClient.publish('fan', currentFanStatus ? 'on' : 'off');
   mqttClient.publish('led', currentLightStatus ? 'on' : 'off');
+  mqttClient.publish('addLed', currentAddLedStatus ? 'on' : 'off');
 
   //console.log(`New connection: ${socket.id}`);
 
@@ -69,9 +71,9 @@ io.on('connection', (socket) => {
   })
 })
 
-global.mqttClient = mqtt.connect('mqtt://192.168.227.247');
+global.mqttClient = mqtt.connect('mqtt://192.168.111.247');
 
-const topics = ['data', 'ledok', 'fanok'];
+const topics = ['data', 'ledok', 'fanok','addledok','canhbao'];
 mqttClient.on('connect', () => {
   topics.forEach((topic) => {
     mqttClient.subscribe(topic, (err) => {
@@ -87,11 +89,18 @@ mqttClient.on('connect', () => {
 
 mqttClient.on('message', (topic, message) => {
   if (topic === 'data') dbController.updateData(topic, message);
+  else if(topic == 'addledok') {
+    io.emit('statusAddLed', message.toString());
+  }
   else if (topic === 'ledok') {
     io.emit('statusLed', message.toString());
   } else if (topic === 'fanok') {
     io.emit('statusFan', message.toString());
-  }
+  } else if (topic === 'canhbao') {
+    io.emit('canhbao', message.toString());
+    console.log('canhbao',message.toString());
+  } 
+  
 });
 
 mqttClient.on('close', () => {

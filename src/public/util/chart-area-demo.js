@@ -85,7 +85,7 @@ const getGas = () => {
   arr.forEach(data => {
     gas.push(parseInt(data.gas))
   })
-  document.getElementById('gas').textContent = gas[19]*10 + '%LEL';
+  document.getElementById('gas').textContent = gas[19] ;
   document.documentElement.style.setProperty('--widthGas', gas[19]*10 + '%');
   gas.reverse();
   return gas;
@@ -260,78 +260,78 @@ var loop = setInterval(() => {
       }
     }
   });
-  // var myLineChart2 = new Chart(ctx2, {
-  //   type: 'line',
-  //   data: {
-  //     labels: createLabels(),
-  //     datasets: [
-  //       {
-  //         label: "Gas",
-  //         lineTension: 0.3,
-  //         backgroundColor: "rgba(0,0,0,0.01",
-  //         borderColor: "#6f42c1",
-  //         pointRadius: 0,
-  //         borderWidth: 2,
-  //         pointBackgroundColor: "#6f42c1",
-  //         pointBorderColor: "#6f42c1",
-  //         pointHoverRadius: 3,
-  //         pointHoverBackgroundColor: "#6f42c1",
-  //         pointHoverBorderColor: "#6f42c1",
-  //         pointHitRadius: 10,
-  //         pointBorderWidth: 2,
-  //         data: getGas(),
-  //         yAxisID: 'left',
-  //       }
-  //     ],
-  //   },
-  //   options: {
-  //     maintainAspectRatio: false,
-  //     animation: {
-  //       duration: 0 // Đặt duration (thời gian) là 0 để tắt transition
-  //     },
-  //     layout: {
-  //       padding: {
-  //         left: 10,
-  //         right: 25,
-  //         top: 25,
-  //         bottom: 0
-  //       }
-  //     },
-  //     scales: {
-  //       xAxes: [{
-  //         time: {
-  //           unit: 'date'
-  //         },
-  //         gridLines: {
-  //           display: false,
-  //           drawBorder: false
-  //         },
-  //         ticks: {
-  //           maxTicksLimit: 10
-  //         }
-  //       }],
-  //       yAxes: [{
-  //         id: 'left',
-  //         position: 'left',
-  //         ticks: {
-  //           maxTicksLimit: 3, 
-  //           padding: 10,
-  //           callback: function (value, index, values) {
-  //             return number_format(value);
-  //           }
-  //         },
-  //         gridLines: { 
-  //           color: "rgb(234, 236, 244)",
-  //           zeroLineColor: "rgb(234, 236, 244)",
-  //           drawBorder: false,
-  //           borderDash: [3],
-  //           zeroLineBorderDash: [3]
-  //         }
-  //       }],
-  //     },
-  //     legend: { //chủ thích
-  //       display: true
-  //     }
-  //   }
-  // });
+  var myLineChart2 = new Chart(ctx2, {
+    type: 'line',
+    data: {
+      labels: createLabels(),
+      datasets: [
+        {
+          label: "Gas",
+          lineTension: 0.3,
+          backgroundColor: "rgba(0,0,0,0.01",
+          borderColor: "#6f42c1",
+          pointRadius: 0,
+          borderWidth: 2,
+          pointBackgroundColor: "#6f42c1",
+          pointBorderColor: "#6f42c1",
+          pointHoverRadius: 3,
+          pointHoverBackgroundColor: "#6f42c1",
+          pointHoverBorderColor: "#6f42c1",
+          pointHitRadius: 10,
+          pointBorderWidth: 2,
+          data: getGas(),
+          yAxisID: 'left',
+        }
+      ],
+    },
+    options: {
+      maintainAspectRatio: false,
+      animation: {
+        duration: 0 // Đặt duration (thời gian) là 0 để tắt transition
+      },
+      layout: {
+        padding: {
+          left: 10,
+          right: 25,
+          top: 25,
+          bottom: 0
+        }
+      },
+      scales: {
+        xAxes: [{
+          time: {
+            unit: 'date'
+          },
+          gridLines: {
+            display: false,
+            drawBorder: false
+          },
+          ticks: {
+            maxTicksLimit: 10
+          }
+        }],
+        yAxes: [{
+          id: 'left',
+          position: 'left',
+          ticks: {
+            maxTicksLimit: 3, 
+            padding: 10,
+            callback: function (value, index, values) {
+              return number_format(value);
+            }
+          },
+          gridLines: { 
+            color: "rgb(234, 236, 244)",
+            zeroLineColor: "rgb(234, 236, 244)",
+            drawBorder: false,
+            borderDash: [3],
+            zeroLineBorderDash: [3]
+          }
+        }],
+      },
+      legend: { //chủ thích
+        display: true
+      }
+    }
+  });
 }, 3000);

@@ -1,2 +1,11 @@
-h1 {
-  color: red; }
+:root {
+  --canhbao: white; }
+
+#fan {
+  background-color: var(--canhbao); }
+
+#led1 {
+  background-color: var(--canhbao); }
+
+#led2 {
+  background-color: var(--canhbao); }

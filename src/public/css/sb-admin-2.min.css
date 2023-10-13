@@ -5538,7 +5538,7 @@ button.bg-success:hover {
   width: var(--widthHum); }
 
 .bg-info3 {
-  background: linear-gradient(to right, #fff, #000) !important;
+  background: linear-gradient(to right, #000, yellow) !important;
   width: var(--widthLight); }
 
 .bg-info4 {
